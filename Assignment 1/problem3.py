@@ -49,9 +49,6 @@ predicted = predicted.T
 
 print mean_squared_error(predicted.A1, y.A1)
 
-
-
-
 #update X and y with test data
 X = [feature(d) for d in test]
 y = [d[11] for d in test]
