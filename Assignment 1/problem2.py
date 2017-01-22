@@ -13,9 +13,9 @@ data = list(parseData("http://jmcauley.ucsd.edu/cse190/data/beer/beer_50000.json
 print "done"
 
 def feature(datum):
-  feat = [1]
+  feat = []
   f = datum['review/timeStruct']['year']
-  for i in range(1999, 2012):
+  for i in range(1999, 2013):
       if f == i:
           feat.append(1)
       else:
