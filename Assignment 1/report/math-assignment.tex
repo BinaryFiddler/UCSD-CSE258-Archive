@@ -95,53 +95,40 @@ The fitted value of $\theta_0$ and $\theta_1$ are $[-3.91707489e+01, 2.14379786e
 \paragraph{Task 3}
 
 The fitted coefficients are
+$$
 \begin{bmatrix}
-	2.56420278e+02 \\  1.35421303e-01 \\ -1.72994866e+00  \\ 1.02651152e-01\\
-	1.09038568e-01 \\-2.76775152e-01  \\ 6.34332169e-03  \\ 3.85023935e-05\\
-	-2.58652808e+02 \\  1.19540565e+00  \\ 8.33006284e-01 \\  9.79304364e-02
+2.56420278e+02 \\  1.35421303e-01 \\ -1.72994866e+00  \\ 1.02651152e-01\\
+1.09038568e-01 \\ -2.76775152e-01  \\ 6.34332169e-03  \\ 3.85023935e-05\\
+-2.58652808e+02 \\  1.19540565e+00  \\ 8.33006284e-01 \\  9.79304364e-02
 \end{bmatrix}
+$$
 The MSE for the training data is 0.602307502903, while the MSE on the testing data is 0.562457127767. 
 
 \paragraph{Task 4}
-
-
+(a) The MSE for 11 ablation experiments are 
+$$
+\begin{bmatrix}
+0.559113415175\\
+0.596384849311\\
+0.562221703459\\
+0.55362506398\\
+0.562629269948\\
+0.5561408204\\
+0.56242900712\\
+0.544726553466\\
+0.559566626638\\
+0.557346348772\\
+0.573214743821
+\end{bmatrix}
+$$
+(b) The larger the difference between MSE with ablation and MSE on all 11 features, the more additional information that ablation provides. The second feature "volatile acidity" provides the most additional information. While the "total sulfur dioxide" provides the least additional information.
 \clearpage
 
-\section{Homework}
+\section{Classification}
 
-\paragraph{Task 1}
-Calculate the following:
-\begin{multicols}{2}
-\begin{enumerate}[(a)]
-\item $\frac{1+5i}{2-i}$
-\item $(2-3i)\cdot(4+3i)$
-\item $i^{14}$
-\item $\frac{1-i}{1+i}$
-\end{enumerate}
-\end{multicols}
+\paragraph{Task 5}
+The accuracy of the classifier on the training data is 1.0, while the accuracy on the testing data is 0.668027766435.
 
-\paragraph{Task 2}
-This is a two part assignment:
-\begin{enumerate}
-\item If \ldots then \ldots is?
-\begin{multicols}{3}
-\begin{enumerate}[(a)]
-\item 1
-\item 0
-\item -1
-\end{enumerate}
-\end{multicols}
-\item If \ldots then \ldots ?
-\begin{multicols}{2}
-\begin{enumerate}[(a)]
-\item Yes
-\item No
-\end{enumerate}
-\end{multicols}
-\end{enumerate}
-
-\paragraph{Task 3}
-As you can see on Fig.~\ref{fig:cmpl}\ldots Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-
+\paragraph{Task 6}
+After convergence, the log likelihood is -1388.69674843, while the accuracy on the testing data is 0.76929358922.
 \end{document}

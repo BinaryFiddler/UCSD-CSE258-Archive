@@ -24,8 +24,6 @@ def dataProcessing(w):
 # Split data into test data and training data
 print "Reading and processing data..."
 wine = dataProcessing(wine)
-# train = wine[:len(wine)/2]
-# test = wine[len(wine)/2:]
 print "done"
 
 def feature(datum):
@@ -75,9 +73,6 @@ X = [feature(d) for d in wine]
 # Extract features and labels from the data
 y = [d[11] > 5 for d in wine]
 
-# X = numpy.matrix(X)
-# y = numpy.matrix(y)
-
 y_train = y[:len(y)/2]
 y_test = y[len(y)/2:]
 
@@ -108,4 +103,4 @@ def count_acc(predict, original):
 
 # print count_acc(y_predict, y_test) / len(y_test)
 print "Accuracy = ", count_acc(y_predict, y_test) / len(y_test)
-# Compute the accuracy
+# Compute the accuracy 0.76929358922
