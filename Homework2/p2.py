@@ -87,20 +87,12 @@ def performance(theta):
   predictions_validate = [s > 0 for s in scores_validate]
   predictions_test = [s > 0 for s in scores_test]
 
-  # correct_train = [(a==b) for (a,b) in zip(predictions_train,y_train)]
-  # correct_validate = [(a==b) for (a,b) in zip(predictions_validate,y_validate)]
-  # correct_test = [(a==b) for (a,b) in zip(predictions_test,y_test)]
-  #
-  # acc_train = sum(correct_train) * 1.0 / len(correct_train)
-  # acc_validate = sum(correct_validate) * 1.0 / len(correct_validate)
-  # acc_test = sum(correct_test) * 1.0 / len(correct_test)
-
   true_positive = [(a==b) and a == True for (a,b) in zip(predictions_test,y_test)]
   true_negative = [(a==b) and a == False for (a,b) in zip(predictions_test,y_test)]
   false_positive = [(a!=b) and a == True for (a,b) in zip(predictions_test,y_test)]
   false_negative = [(a!=b) and a == False for (a,b) in zip(predictions_test,y_test)]
   #compute balanced error rate
-  ber = 0.5 * (1.0 * sum(false_positive) / (sum(true_negative) + sum(false_positive)) + sum(false_negative) / (sum(true_positive) + sum(false_negative)))
+  ber = 1 - 0.5 * (1.0 * sum(true_positive) / (sum(true_positive) + sum(false_negative)) + 1.0 * sum(true_negative) / (sum(true_negative) + sum(false_positive)))
 
   return ber, true_positive, true_negative, false_positive, false_negative
 

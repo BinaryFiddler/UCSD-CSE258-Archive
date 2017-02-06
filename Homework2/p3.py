@@ -75,30 +75,11 @@ def train(lam):
   return theta
 
 ##################################################
-# Predict                                        #
-##################################################
-
-def performance(theta):
-  scores_test = [inner(theta,x) for x in X_test]
-  predictions_test = [s > 0 for s in scores_test]
-  correct_test = [(a==b) for (a,b) in zip(predictions_test,y_test)]
-
-  true_positive = [(a==b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  true_negative = [(a==b) and a == False for (a,b) in zip(predictions_test,y_test)]
-  false_positive = [(a!=b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  false_negative = [(a!=b) and a == False for (a,b) in zip(predictions_test,y_test)]
-
-  #compute balanced error rate
-  ber = 0.5 * (1.0 * sum(false_positive) / (sum(true_negative) + sum(false_positive)) + sum(false_negative) / (sum(true_positive) + sum(false_negative)))
-
-  return ber, true_positive, true_negative, false_positive, false_negative
-
-##################################################
 # Precision and Recall                                        #
 ##################################################
 def precision_and_recall(theta, top):
   scores_test = [inner(theta,x) for x in X_test]
-  scores_test = sorted(scores_test, key = abs, reverse=True)
+  scores_test = sorted(scores_test, reverse=True)
 
   predictions_test = [s > 0 for s in scores_test]
 
@@ -113,7 +94,6 @@ def precision_and_recall(theta, top):
 
 lam = 0.01
 theta = train(lam)
-ber, true_positive, true_negative, false_positive, false_negative= performance(theta)
 for top in [10, 500, 1000]:
     precision, recall = precision_and_recall(theta, top)
     print("For top " + str(top) + " predictions, the precision is " + str(precision) + " ,the recall is " + str(recall))
