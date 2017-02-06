@@ -75,11 +75,11 @@ def train(lam):
   return theta
 
 ##################################################
-# Precision and Recall                                        #
+# Precision and Recall                           #
 ##################################################
 def precision_and_recall(theta, top):
   scores_test = [inner(theta,x) for x in X_test]
-  scores_test = sorted(scores_test, reverse=True)
+  scores_test = sorted(scores_test, key=abs, reverse=True)
 
   predictions_test = [s > 0 for s in scores_test]
 

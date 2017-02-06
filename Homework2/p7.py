@@ -27,12 +27,9 @@ X_train = X[:int(len(X)/3)]
 pca = PCA(n_components=4)
 pca.fit(X_train)
 X_new = pca.transform(X_train)
-# print pca.components_
-print X_train[:1]
 
 X_restored = pca.inverse_transform(X_new)
 X_restored = X_restored.tolist()
-print X_restored[:1]
 
 def recon_error(X_Orig, X_Compressed):
     error = 0
