@@ -78,16 +78,17 @@ def train(lam):
   return theta
 
 ##################################################
-# Precision and Recall                                        #
+# Precision and Recall                           #
 ##################################################
 def precision_and_recall(theta, top):
   scores_test = [inner(theta,x) for x in X_test]
-  scores_test = sorted(scores_test, key = abs, reverse=True)
+  scores_sort = sorted(scores_test, reverse = True)
 
-  predictions_test = [s > 0 for s in scores_test]
+  indices = sorted(range(len(scores_test)), key = lambda k: scores_test[k], reverse = True)
+  y_sort = [y_test[indices[x]] for x in range(len(indices))]
 
-  precision = 1.0 * sum(predictions_test[0:top]) / top
-  recall = 1.0 * sum(predictions_test[0:top]) / sum(predictions_test)
+  precision = 1.0 * sum(y_sort[0:top]) / top
+  recall = 1.0 * sum(y_sort[0:top]) / sum(y_sort)
 
   return precision, recall
 
