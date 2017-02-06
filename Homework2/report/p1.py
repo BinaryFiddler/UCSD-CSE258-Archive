@@ -18,6 +18,7 @@ fields = ["constant"] + header.strip().replace('"','').split(';')
 featureNames = fields[:-1]
 labelName = fields[-1]
 lines = [[1.0] + [float(x) for x in l.split(';')] for l in dataFile]
+random.shuffle(lines)
 X = [l[:-1] for l in lines]
 y = [l[-1] > 5 for l in lines]
 print "done"
@@ -87,22 +88,20 @@ def performance(theta):
   predictions_validate = [s > 0 for s in scores_validate]
   predictions_test = [s > 0 for s in scores_test]
 
-  true_positive = [(a==b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  true_negative = [(a==b) and a == False for (a,b) in zip(predictions_test,y_test)]
-  false_positive = [(a!=b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  false_negative = [(a!=b) and a == False for (a,b) in zip(predictions_test,y_test)]
-  #compute balanced error rate
-  ber = 1 - 0.5 * (1.0 * sum(true_positive) / (sum(true_positive) + sum(false_negative)) + 1.0 * sum(true_negative) / (sum(true_negative) + sum(false_positive)))
+  correct_train = [(a==b) for (a,b) in zip(predictions_train,y_train)]
+  correct_validate = [(a==b) for (a,b) in zip(predictions_validate,y_validate)]
+  correct_test = [(a==b) for (a,b) in zip(predictions_test,y_test)]
 
-  return ber, true_positive, true_negative, false_positive, false_negative
+  acc_train = sum(correct_train) * 1.0 / len(correct_train)
+  acc_validate = sum(correct_validate) * 1.0 / len(correct_validate)
+  acc_test = sum(correct_test) * 1.0 / len(correct_test)
+  return acc_train, acc_validate, acc_test
 
 ##################################################
 # Validation pipeline                            #
 ##################################################
 
-lam = 0.01
-theta = train(lam)
-ber, true_positive, true_negative, false_positive, false_negative= performance(theta)
-# print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))
-print "true positive: %d \ntrue negative: %d\nfalse positive: %d\nfalse negative: %d" %(sum(true_positive), sum(true_negative), sum(false_positive), sum(false_negative))
-print "The balanced error rate is: " + str(ber)
+for lam in [0, 0.01, 1.0, 100.0]:
+  theta = train(lam)
+  acc_train, acc_validate, acc_test = performance(theta)
+  print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))

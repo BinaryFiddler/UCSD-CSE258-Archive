@@ -17,13 +17,25 @@ header = dataFile.readline()
 fields = ["constant"] + header.strip().replace('"','').split(';')
 featureNames = fields[:-1]
 labelName = fields[-1]
-lines = [[1.0] + [float(x) for x in l.split(';')] for l in dataFile]
+lines = [[] + [float(x) for x in l.split(';')] for l in dataFile]
 X = [l[:-1] for l in lines]
 y = [l[-1] > 5 for l in lines]
 print "done"
 
 X_train = X[:int(len(X)/3)]
 
-pca = PCA(n_components=11)
+pca = PCA(n_components=4)
 pca.fit(X_train)
-print pca.components_
+X_new = pca.transform(X_train)
+
+X_restored = pca.inverse_transform(X_new)
+X_restored = X_restored.tolist()
+
+def recon_error(X_Orig, X_Compressed):
+    error = 0
+    for i in range(0, len(X_Orig)):
+        for j in range(0, len(X_Orig[0])):
+            error = error + (X_Compressed[i][j] - X_Orig[i][j]) * (X_Compressed[i][j] - X_Orig[i][j])
+    return error
+
+print recon_error(X_train, X_restored)

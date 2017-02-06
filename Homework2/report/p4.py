@@ -2,8 +2,11 @@ import numpy
 import urllib
 import scipy.optimize
 import random
+import matplotlib.pyplot as plt
 from math import exp
 from math import log
+
+
 
 random.seed(0)
 
@@ -75,26 +78,19 @@ def train(lam):
   return theta
 
 ##################################################
-# Predict                                        #
+# Precision and Recall                           #
 ##################################################
-
-def performance(theta):
-  scores_train = [inner(theta,x) for x in X_train]
-  scores_validate = [inner(theta,x) for x in X_validate]
+def precision_and_recall(theta, top):
   scores_test = [inner(theta,x) for x in X_test]
+  scores_sort = sorted(scores_test, reverse = True)
 
-  predictions_train = [s > 0 for s in scores_train]
-  predictions_validate = [s > 0 for s in scores_validate]
-  predictions_test = [s > 0 for s in scores_test]
+  indices = sorted(range(len(scores_test)), key = lambda k: scores_test[k], reverse = True)
+  y_sort = [y_test[indices[x]] for x in range(len(indices))]
 
-  true_positive = [(a==b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  true_negative = [(a==b) and a == False for (a,b) in zip(predictions_test,y_test)]
-  false_positive = [(a!=b) and a == True for (a,b) in zip(predictions_test,y_test)]
-  false_negative = [(a!=b) and a == False for (a,b) in zip(predictions_test,y_test)]
-  #compute balanced error rate
-  ber = 1 - 0.5 * (1.0 * sum(true_positive) / (sum(true_positive) + sum(false_negative)) + 1.0 * sum(true_negative) / (sum(true_negative) + sum(false_positive)))
+  precision = 1.0 * sum(y_sort[0:top]) / top
+  recall = 1.0 * sum(y_sort[0:top]) / sum(y_sort)
 
-  return ber, true_positive, true_negative, false_positive, false_negative
+  return precision, recall
 
 ##################################################
 # Validation pipeline                            #
@@ -102,7 +98,13 @@ def performance(theta):
 
 lam = 0.01
 theta = train(lam)
-ber, true_positive, true_negative, false_positive, false_negative= performance(theta)
-# print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))
-print "true positive: %d \ntrue negative: %d\nfalse positive: %d\nfalse negative: %d" %(sum(true_positive), sum(true_negative), sum(false_positive), sum(false_negative))
-print "The balanced error rate is: " + str(ber)
+precisions = []
+recalls = []
+for top in range(1, len(y_test)):
+    precision, recall = precision_and_recall(theta, top)
+    precisions.append(precision)
+    recalls.append(recall)
+    # print("For top " + str(top) + " predictions, the precision is " + str(precision) + " ,the recall is " + str(recall))
+
+plt.plot(recalls, precisions)
+plt.show()
