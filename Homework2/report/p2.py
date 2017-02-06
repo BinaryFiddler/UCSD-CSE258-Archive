@@ -104,5 +104,5 @@ lam = 0.01
 theta = train(lam)
 ber, true_positive, true_negative, false_positive, false_negative= performance(theta)
 # print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))
-print "true positive: %d \ntrue negative: %d\nfalse positive: %d\nfalse negative: %d" %(sum(true_positive), sum(true_negative), sum(false_positive), sum(false_negative))
-print "The balanced error rate is: " + str(ber)
+print sum(true_positive), sum(true_negative), sum(false_positive), sum(false_negative)
+print ber

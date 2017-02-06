@@ -22,8 +22,10 @@ X = [l[:-1] for l in lines]
 y = [l[-1] > 5 for l in lines]
 print "done"
 
+print len(y)
+
 X_train = X[:int(len(X)/3)]
 
-pca = PCA(n_components=11)
+pca = PCA(n_components=12)
 pca.fit(X_train)
 print pca.components_
