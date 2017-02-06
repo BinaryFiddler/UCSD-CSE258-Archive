@@ -18,7 +18,6 @@ fields = ["constant"] + header.strip().replace('"','').split(';')
 featureNames = fields[:-1]
 labelName = fields[-1]
 lines = [[1.0] + [float(x) for x in l.split(';')] for l in dataFile]
-random.shuffle(lines)
 X = [l[:-1] for l in lines]
 y = [l[-1] > 5 for l in lines]
 print "done"
@@ -80,28 +79,41 @@ def train(lam):
 ##################################################
 
 def performance(theta):
-  scores_train = [inner(theta,x) for x in X_train]
-  scores_validate = [inner(theta,x) for x in X_validate]
   scores_test = [inner(theta,x) for x in X_test]
-
-  predictions_train = [s > 0 for s in scores_train]
-  predictions_validate = [s > 0 for s in scores_validate]
   predictions_test = [s > 0 for s in scores_test]
-
-  correct_train = [(a==b) for (a,b) in zip(predictions_train,y_train)]
-  correct_validate = [(a==b) for (a,b) in zip(predictions_validate,y_validate)]
   correct_test = [(a==b) for (a,b) in zip(predictions_test,y_test)]
 
-  acc_train = sum(correct_train) * 1.0 / len(correct_train)
-  acc_validate = sum(correct_validate) * 1.0 / len(correct_validate)
-  acc_test = sum(correct_test) * 1.0 / len(correct_test)
-  return acc_train, acc_validate, acc_test
+  true_positive = [(a==b) and a == True for (a,b) in zip(predictions_test,y_test)]
+  true_negative = [(a==b) and a == False for (a,b) in zip(predictions_test,y_test)]
+  false_positive = [(a!=b) and a == True for (a,b) in zip(predictions_test,y_test)]
+  false_negative = [(a!=b) and a == False for (a,b) in zip(predictions_test,y_test)]
+
+  #compute balanced error rate
+  ber = 0.5 * (1.0 * sum(false_positive) / (sum(true_negative) + sum(false_positive)) + sum(false_negative) / (sum(true_positive) + sum(false_negative)))
+
+  return ber, true_positive, true_negative, false_positive, false_negative
+
+##################################################
+# Precision and Recall                                        #
+##################################################
+def precision_and_recall(theta, top):
+  scores_test = [inner(theta,x) for x in X_test]
+  scores_test = sorted(scores_test, key = abs, reverse=True)
+
+  predictions_test = [s > 0 for s in scores_test]
+
+  precision = 1.0 * sum(predictions_test[0:top]) / top
+  recall = 1.0 * sum(predictions_test[0:top]) / sum(predictions_test)
+
+  return precision, recall
 
 ##################################################
 # Validation pipeline                            #
 ##################################################
 
-for lam in [0, 0.01, 1.0, 100.0]:
-  theta = train(lam)
-  acc_train, acc_validate, acc_test = performance(theta)
-  print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))
+lam = 0.01
+theta = train(lam)
+ber, true_positive, true_negative, false_positive, false_negative= performance(theta)
+for top in [10, 500, 1000]:
+    precision, recall = precision_and_recall(theta, top)
+    print("For top " + str(top) + " predictions, the precision is " + str(precision) + " ,the recall is " + str(recall))

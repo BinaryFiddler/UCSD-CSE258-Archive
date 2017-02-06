@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{tgtermes}
+\usepackage{listings}
 
 \usepackage[
 pdftitle={CSE258 Homework 1}, 
@@ -65,6 +66,32 @@ bindingoffset=0mm, top=20mm,bottom=20mm}
 \renewcommand{\footrulewidth}{0pt}
 %
 
+% custom style for code
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstdefinestyle{customasm}{
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
 %%%----------%%%----------%%%----------%%%----------%%%
 
 \begin{document}
@@ -73,7 +100,7 @@ bindingoffset=0mm, top=20mm,bottom=20mm}
 
 \author{Chenyu Huang, University of California San Diego}
 
-\date{01/01/2014}
+\date{01/22/2017}
 
 \maketitle
 
@@ -121,7 +148,7 @@ $$
 0.573214743821
 \end{bmatrix}
 $$
-(b) The larger the difference between MSE with ablation and MSE on all 11 features, the more additional information that ablation provides. The second feature "volatile acidity" provides the most additional information. While the "total sulfur dioxide" provides the least additional information.
+(b) The larger the MSE with ablation, the more additional information that ablation provides. By the same principle, the smaller the MSE with ablation, the less predictive power that feature will possess. The second feature "volatile acidity" provides the most additional information. While the "density" provides the least additional information.
 \clearpage
 
 \section{Classification}
@@ -131,4 +158,16 @@ The accuracy of the classifier on the training data is 1.0, while the accuracy o
 
 \paragraph{Task 6}
 After convergence, the log likelihood is -1388.69674843, while the accuracy on the testing data is 0.76929358922.
+
+\clearpage
+
+\section{Code}
+\lstinputlisting[language=Python, caption={task1}]{problem1.py}\clearpage
+\lstinputlisting[language=Python, caption={task2}]{problem2.py}\clearpage
+\lstinputlisting[language=Python, caption={task3}]{problem3.py}\clearpage
+\lstinputlisting[language=Python, caption={task4}]{problem4.py}\clearpage
+\lstinputlisting[language=Python, caption={task5}]{problem5.py}\clearpage
+\lstinputlisting[language=Python, caption={task6}]{problem6.py}\clearpage
+
+
 \end{document}

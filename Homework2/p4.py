@@ -2,8 +2,11 @@ import numpy
 import urllib
 import scipy.optimize
 import random
+import matplotlib.pyplot as plt
 from math import exp
 from math import log
+
+
 
 random.seed(0)
 
@@ -18,7 +21,6 @@ fields = ["constant"] + header.strip().replace('"','').split(';')
 featureNames = fields[:-1]
 labelName = fields[-1]
 lines = [[1.0] + [float(x) for x in l.split(';')] for l in dataFile]
-random.shuffle(lines)
 X = [l[:-1] for l in lines]
 y = [l[-1] > 5 for l in lines]
 print "done"
@@ -76,32 +78,32 @@ def train(lam):
   return theta
 
 ##################################################
-# Predict                                        #
+# Precision and Recall                                        #
 ##################################################
-
-def performance(theta):
-  scores_train = [inner(theta,x) for x in X_train]
-  scores_validate = [inner(theta,x) for x in X_validate]
+def precision_and_recall(theta, top):
   scores_test = [inner(theta,x) for x in X_test]
+  scores_test = sorted(scores_test, key = abs, reverse=True)
 
-  predictions_train = [s > 0 for s in scores_train]
-  predictions_validate = [s > 0 for s in scores_validate]
   predictions_test = [s > 0 for s in scores_test]
 
-  correct_train = [(a==b) for (a,b) in zip(predictions_train,y_train)]
-  correct_validate = [(a==b) for (a,b) in zip(predictions_validate,y_validate)]
-  correct_test = [(a==b) for (a,b) in zip(predictions_test,y_test)]
+  precision = 1.0 * sum(predictions_test[0:top]) / top
+  recall = 1.0 * sum(predictions_test[0:top]) / sum(predictions_test)
 
-  acc_train = sum(correct_train) * 1.0 / len(correct_train)
-  acc_validate = sum(correct_validate) * 1.0 / len(correct_validate)
-  acc_test = sum(correct_test) * 1.0 / len(correct_test)
-  return acc_train, acc_validate, acc_test
+  return precision, recall
 
 ##################################################
 # Validation pipeline                            #
 ##################################################
 
-for lam in [0, 0.01, 1.0, 100.0]:
-  theta = train(lam)
-  acc_train, acc_validate, acc_test = performance(theta)
-  print("lambda = " + str(lam) + ";\ttrain=" + str(acc_train) + "; validate=" + str(acc_validate) + "; test=" + str(acc_test))
+lam = 0.01
+theta = train(lam)
+precisions = []
+recalls = []
+for top in range(1, len(y_test)):
+    precision, recall = precision_and_recall(theta, top)
+    precisions.append(precision)
+    recalls.append(recall)
+    # print("For top " + str(top) + " predictions, the precision is " + str(precision) + " ,the recall is " + str(recall))
+
+plt.plot(recalls, precisions)
+plt.show()
