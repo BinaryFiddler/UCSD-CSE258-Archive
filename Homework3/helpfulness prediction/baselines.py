@@ -24,9 +24,6 @@ print "alpha: ", alpha
 
 totalError = 0
 for i in range(100000, 200000):
-    if(outof[i] == 0):
-        continue
-    else:
-        totalError = totalError + abs(1.0 * nhelpful[i] / outof[i] - alpha)
+        totalError = totalError + abs(1.0 * nhelpful[i] - alpha * outof[i])
 
-print "Mean absolute error:", totalError / len(outof) * 2
+print "Mean absolute error:", 2 * totalError / len(outof)
