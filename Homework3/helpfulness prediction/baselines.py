@@ -8,25 +8,20 @@ def readGz(f):
 ### Rating baseline: compute averages for each user, or return the global average if we've never seen the user before
 
 allRatings = []
-nhelpful = [];
-outof = [];
+iteration = 15
+lam = 0.2
+alpha
+beta1
+beta2
 userRatings = defaultdict(list)
-for l in readGz("train.json.gz"):
-  user,item = l['reviewerID'],l['itemID']
-  helpful = l['helpful']
-  nhelpful.append(helpful['nHelpful'])
-  outof.append(helpful['outOf'])
-  allRatings.append(l['rating'])
-  userRatings[user].append(l['rating'])
+for i in range(iteration):
+    print i
+    for l in readGz("train.json.gz"):
+        alpha = 
 
-alpha = 1.0 * sum(nhelpful[:100000]) / sum(outof[:100000])
-print "alpha: ", alpha
-
-totalError = 0
-for i in range(100000, 200000):
-    if(outof[i] == 0):
-        continue
-    else:
-        totalError = totalError + abs(1.0 * nhelpful[i] / outof[i] - alpha)
-
-print "Mean absolute error:", totalError / len(outof) * 2
+      user,item = l['reviewerID'],l['itemID']
+      helpful = l['helpful']
+      nhelpful.append(helpful['nHelpful'])
+      outof.append(helpful['outOf'])
+      allRatings.append(l['rating'])
+      userRatings[user].append(l['rating'])
