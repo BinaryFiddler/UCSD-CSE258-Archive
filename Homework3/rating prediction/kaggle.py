@@ -34,7 +34,7 @@ alpha = 1.0 * sum(allRatings[:100000]) / 100000
 alpha = 0
 
 iteration = 20
-lamda = 1
+lamda = 7
 
 for i in range(0, iteration):
 	# print alpha, betaU['U989129959'], betaI['I734011860']
