@@ -7,8 +7,7 @@ def readGz(f):
     yield eval(l)
 
 data = list(readGz("train.json.gz"))
-train = data[:100000]
-validation = data[100000:]
+train = data
 ### Rating baseline: compute averages for each user, or return the global average if we've never seen the user before
 
 allRatings = []
@@ -38,7 +37,7 @@ iteration = 20
 lamda = 1
 
 for i in range(0, iteration):
-	print alpha, betaU['U989129959'], betaI['I734011860']
+	# print alpha, betaU['U989129959'], betaI['I734011860']
  	# update alpha
 	alpha = (sum(ratings.values()) - sum(betaU.values()) - sum(betaI.values()))/ len(train)
 	# update betaU
@@ -48,26 +47,24 @@ for i in range(0, iteration):
 	# update betaI
 	for key in betaI:
 		relavantUsers = itemBoughtByUser[key]
-		betaI[key] = sum((ratings[str(e) + "###" + str(key)] - (alpha + betaU[e])) for e in relavantUsers) / (lamda + len(relavantUsers))
+		betaI[key] = sum((ratings[str(e) + "###" + str(key)] - (alpha + betaU[e])) for e in relavantUsers) / (lamda + len(relavantUsers)) 
 
-realvalue = []
-prediction = []
 
-for l in validation:
-    user,item,rating = l['reviewerID'],l['itemID'], l['rating']
-    key = str(user) + "###" + str(item)
-    realvalue.append(rating)
-    bu = 0
-    bi = 0
-    if user in betaU:
-    	bu = betaU[user]
-    if item in betaI:
-    	bi = betaI[item]
-    prediction.append(alpha + bu + bi) 
-
-def mse(a, b):
-	c = np.subtract(a, b)
-	c = c ** 2
-	return np.sum(c) / len(c)
-
-print mse(np.array(realvalue), np.array(prediction))
+predictions = open("predictions_Rating.txt", 'w')
+for l in open("pairs_Rating.txt"):
+  if l.startswith("userID"):
+    #header
+    predictions.write(l)
+    continue
+  u,i = l.strip().split('-')
+  key = u + '###' + i
+  bu = 0
+  bi = 0
+  if u in betaU:
+    bu = betaU[u]
+  if i in betaI:
+    bi = betaI[i]
+  predict = alpha + bu + bi
+  if key in ratings:
+    predict = ratings[key]
+  predictions.write(u + '-' + i  + ',' + str(predict) + '\n')
