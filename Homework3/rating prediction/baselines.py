@@ -19,6 +19,6 @@ alpha = 1.0 * sum(allRatings[:100000]) / 100000
 
 error = 0
 for i in range(100000, 200000):
-    error = error + abs(allRatings[i] - alpha)
+    error = error + (allRatings[i] - alpha) ** 2
 print alpha
 print error / 100000
